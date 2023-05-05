@@ -67,7 +67,7 @@ const createUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
 
   fs.readFile(filePath, (err, data) => {
     if (err) {

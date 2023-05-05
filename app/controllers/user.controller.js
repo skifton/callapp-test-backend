@@ -1,3 +1,4 @@
+const { randomUUID } = require("crypto");
 const fs = require("fs");
 
 const filePath = "./users.json";
@@ -13,7 +14,7 @@ const getUser = (req, res) => {
     }
 
     const users = JSON.parse(data);
-    const userIndex = users.findIndex((user) => user.id === userId);
+    const userIndex = users.findIndex((user) => user.id == userId);
     const user = users[userIndex];
 
     res.status(200).send(user);
@@ -41,8 +42,12 @@ const createUser = (req, res) => {
       return;
     }
 
+    const id = randomUUID();
     const users = JSON.parse(data);
-    const newUser = req.body;
+    const newUser = {
+      id,
+      ...req.body
+    };
     users.push(newUser);
 
     fs.writeFile(filePath, JSON.stringify(users), (err) => {
@@ -95,7 +100,7 @@ const updateUser = (req, res) => {
 };
 
 const removeUser = (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
@@ -105,9 +110,9 @@ const removeUser = (req, res) => {
     }
 
     const users = JSON.parse(data);
-    const userIndex = users.findIndex((user) => user.id === userId);
+    const userIndex = users.findIndex((user) => user.id == userId);
 
-    if (userIndex === -1) {
+    if (userIndex == -1) {
       res.status(404).send("User not found");
       return;
     }

@@ -17,6 +17,10 @@ const getUser = (req, res) => {
     const userIndex = users.findIndex((user) => user.id == userId);
     const user = users[userIndex];
 
+    if(userIndex === -1) {
+      res.status(404).send("User Not Found");
+    }
+
     res.status(200).send(user);
   });
 };
